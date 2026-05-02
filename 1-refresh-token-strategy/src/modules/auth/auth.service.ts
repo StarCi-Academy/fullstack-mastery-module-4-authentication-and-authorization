@@ -1,8 +1,12 @@
 import {
     ConflictException,
+    ForbiddenException,
     Injectable,
     UnauthorizedException,
 } from "@nestjs/common"
+import {
+    ConfigService,
+} from "@nestjs/config"
 import {
     JwtService,
 } from "@nestjs/jwt"
@@ -17,9 +21,6 @@ import {
     User,
 } from "../user/user.entity"
 import {
-    RefreshDto,
-} from "./dto/refresh.dto"
-import {
     SignInDto,
 } from "./dto/signin.dto"
 import {
@@ -27,8 +28,8 @@ import {
 } from "./dto/signup.dto"
 
 /**
- * Access token ngắn hạn + refresh token JWT lưu hash trong DB để rotate/revoke.
- * (EN: Issues short access JWT + refresh JWT tracked via bcrypt hash.)
+ * Access token ngắn + refresh token dài; hash RT trong DB — rotate mỗi lần refresh, revoke khi logout.
+ * (EN: Short-lived AT + long-lived RT with bcrypt hash, rotation and revocation.)
  */
 @Injectable()
 export class AuthService {
@@ -36,24 +37,12 @@ export class AuthService {
     @InjectRepository(User)
     private readonly usersRepo: Repository<User>,
     private readonly jwtService: JwtService,
+    private readonly config: ConfigService,
     ) {}
 
-    /** Secret ký/verify access JWT — tách khỏi refresh để giảm blast radius nếu lộ một khóa. (EN: access-token signing secret.) */
-    private accessSecret() {
-        return process.env.JWT_ACCESS_SECRET ?? "access-secret"
-    }
-
-    /** Secret riêng cho refresh JWT — không dùng chung access để revoke/rotate độc lập hơn. (EN: refresh-token signing secret.) */
-    private refreshSecret() {
-        return process.env.JWT_REFRESH_SECRET ?? "refresh-secret"
-    }
-
     /**
-     * Đăng ký user credential giống demo JWT cơ bản.
-     * (EN: Credential signup identical baseline JWT demo.)
-     *
-     * @param dto — Email/password đầu vào (EN: signup payload).
-     * @returns Ack `{ message }` sau insert (EN: ack object).
+     * Đăng ký user credential — đồng bộ response `{ id, email }` với `0-jwt-authentication-flow`.
+     * (EN: Signup returning created user id and email.)
      */
     async signUp(dto: SignUpDto) {
         const existing = await this.usersRepo.findOne({
@@ -66,20 +55,19 @@ export class AuthService {
         }
         const hash = await bcrypt.hash(dto.password,
             10)
-        await this.usersRepo.save(this.usersRepo.create({
+        const saved = await this.usersRepo.save(this.usersRepo.create({
             email: dto.email,
             password: hash,
         }))
         return {
-            message: "Created",
+            id: saved.id,
+            email: saved.email,
         }
     }
 
     /**
-     * Đăng nhập và phát cặp token + persist hash refresh hiện tại.
+     * Đăng nhập và phát cặp token + persist refresh hash.
      * (EN: Sign-in issuing token pair and storing refresh hash.)
-     *
-     * @param dto — credential body (EN: sign-in payload).
      */
     async signIn(dto: SignInDto) {
         const user = await this.usersRepo.findOne({
@@ -91,101 +79,81 @@ export class AuthService {
             user.password))) {
             throw new UnauthorizedException("Invalid credentials")
         }
-        return this.issueTokenPair(user)
+        const tokens = await this.getTokens(user.id)
+        await this.updateRtHash(user.id,
+            tokens.refresh_token)
+        return tokens
     }
 
     /**
-     * Rotation: verify refresh JWT + khớp hash DB → phát cặp mới và ghi đè hash.
-     * (EN: Refresh rotation verifies JWT signature/expiry then bcrypt hash equality.)
-     *
-     * @param dto — Raw refresh_token client gửi lại (EN: refresh token body).
-     * @throws UnauthorizedException — JWT sai, hash không khớp, hoặc đã revoke (EN: invalid/reused refresh).
+     * Rotation: khớp RT với hash trong DB → cặp token mới + ghi đè hash (RT cũ vô hiệu).
+     * (EN: Refresh rotation — rejects reused/revoked refresh with 403 Access Denied.)
      */
-    async refreshTokens(dto: RefreshDto) {
-        let payload: { sub: number }
-        try {
-            payload = await this.jwtService.verifyAsync<{ sub: number }>(dto.refresh_token,
-                {
-                    secret: this.refreshSecret(),
-                })
-        } catch {
-            throw new UnauthorizedException("Invalid refresh token")
-        }
-
+    async refreshTokens(userId: number, rt: string) {
         const user = await this.usersRepo.findOne({
             where: {
-                id: payload.sub,
+                id: userId,
             },
         })
-        // Hash trong DB phải khớp token hiện gửi — sau rotate hash đổi nên token cũ fail (EN: detects reuse/stale refresh)
-        if (
-            !user?.hashedRefreshToken ||
-      !(await bcrypt.compare(dto.refresh_token,
-          user.hashedRefreshToken))
-        ) {
-            throw new UnauthorizedException("Refresh token revoked or rotated")
+        if (!user?.refreshTokenHash) {
+            throw new ForbiddenException("Access Denied")
         }
-
-        return this.issueTokenPair(user)
+        const rtMatches = await bcrypt.compare(rt,
+            user.refreshTokenHash)
+        if (!rtMatches) {
+            throw new ForbiddenException("Access Denied")
+        }
+        const tokens = await this.getTokens(user.id)
+        await this.updateRtHash(user.id,
+            tokens.refresh_token)
+        return tokens
     }
 
     /**
-     * Revoke refresh bằng cách null-out hash — access JWT vẫn sống đến khi hết hạn (trade-off demo).
-     * (EN: Clears refresh hash for authenticated user id.)
-     *
-     * @param userId — Subject từ access JWT khi gọi `/auth/logout` (EN: user id from bearer access token).
+     * Revoke — xóa hash refresh; access JWT vẫn sống đến khi hết hạn (trade-off demo).
+     * (EN: Clears refresh hash for authenticated user.)
      */
     async logout(userId: number) {
         await this.usersRepo.update({
             id: userId,
         },
         {
-            hashedRefreshToken: null,
+            refreshTokenHash: null,
         })
         return {
             message: "Logged out",
         }
     }
 
-    /**
-     * Sinh access (15m) + refresh (7d), bcrypt hash refresh string và UPDATE user row.
-     * (EN: Internal helper issuing JWT pair and persisting refresh hash.)
-     *
-     * @param user — Entity đã load id (EN: hydrated user row).
-     * @returns `{ access_token, refresh_token }` plaintext refresh chỉ trả client một lần mỗi lần rotate (EN: token tuple).
-     */
-    private async issueTokenPair(user: User) {
-        const access_token = await this.jwtService.signAsync(
-            {
-                sub: user.id,
-            },
-            {
-                secret: this.accessSecret(),
-                expiresIn: "15m",
-            },
-        )
+    /** Sinh access (15m) + refresh (7d). (EN: Signs JWT pair without persisting hash.) */
+    private async getTokens(userId: number) {
+        const access_token = await this.jwtService.signAsync({
+            sub: userId,
+        })
         const refresh_token = await this.jwtService.signAsync(
             {
-                sub: user.id,
+                sub: userId,
             },
             {
-                secret: this.refreshSecret(),
+                secret: this.config.getOrThrow<string>("JWT_REFRESH_SECRET"),
                 expiresIn: "7d",
             },
         )
-
-        const hashedRefreshToken = await bcrypt.hash(refresh_token,
-            10)
-        await this.usersRepo.update({
-            id: user.id,
-        },
-        {
-            hashedRefreshToken,
-        })
-
         return {
             access_token,
             refresh_token,
         }
+    }
+
+    /** bcrypt hash refresh JWT plaintext và UPDATE user row. (EN: Persist rotated refresh hash.) */
+    private async updateRtHash(userId: number, refreshToken: string) {
+        const refreshTokenHash = await bcrypt.hash(refreshToken,
+            10)
+        await this.usersRepo.update({
+            id: userId,
+        },
+        {
+            refreshTokenHash,
+        })
     }
 }

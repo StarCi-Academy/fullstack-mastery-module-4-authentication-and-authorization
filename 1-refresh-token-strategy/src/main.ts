@@ -1,4 +1,3 @@
-import "dotenv/config"
 import {
     NestFactory,
 } from "@nestjs/core"
@@ -6,12 +5,15 @@ import {
     ValidationPipe,
 } from "@nestjs/common"
 import {
+    ConfigService,
+} from "@nestjs/config"
+import {
     AppModule,
 } from "./app.module"
 
 /**
- * Bootstrap demo refresh-token rotation / revocation.
- * (EN: Bootstrap Nest app for refresh-token lesson.)
+ * Khởi động HTTP API Nest và áp dụng pipe validation toàn cục (đồng bộ module `0-jwt-authentication-flow`).
+ * (EN: Bootstrap Nest HTTP API with global validation and Config-driven port.)
  *
  * @returns Promise<void>
  */
@@ -21,7 +23,9 @@ async function bootstrap() {
         whitelist: true,
         forbidNonWhitelisted: true,
     }))
-    await app.listen(process.env.PORT ?? 3000)
+    const configService = app.get(ConfigService)
+    const port = configService.getOrThrow<number>("PORT")
+    await app.listen(port)
 }
 
 bootstrap()

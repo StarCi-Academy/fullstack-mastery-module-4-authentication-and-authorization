@@ -24,7 +24,7 @@ export class UserController {
     @Get("profile")
     getProfile(@Request() req: { user: { userId: number } }) {
         return {
-            message: "You have accessed a protected area!",
+            message: "Bạn đã truy cập vào khu vực bảo mật!",
             user: {
                 userId: req.user.userId,
             },

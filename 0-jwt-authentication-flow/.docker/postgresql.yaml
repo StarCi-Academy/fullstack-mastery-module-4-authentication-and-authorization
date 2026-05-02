@@ -1,14 +1,17 @@
-
 services:
   postgres:
-    image: postgres:15-alpine
+    # Phải khớp major PG với volume đã init (15 không đọc được data của 16).
+    # EN: Image major version must match existing cluster data under the volume.
+    image: postgres:16-alpine
     container_name: starci-postgres-jwt-flow
     environment:
       POSTGRES_USER: starci_user
       POSTGRES_PASSWORD: starci_password
       POSTGRES_DB: starci_db
     ports:
-      - '5432:5432'
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     restart: always
 
 volumes:

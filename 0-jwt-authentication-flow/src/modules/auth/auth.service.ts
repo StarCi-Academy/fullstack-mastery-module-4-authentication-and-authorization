@@ -40,7 +40,7 @@ export class AuthService {
      * (EN: Persist user with bcrypt password hash; rejects duplicate emails.)
      *
      * @param dto - Email + plain password từ client (EN: credentials from client body).
-     * @returns `{ message }` phản hồi tối giản sau khi lưu DB (EN: minimal ack payload).
+     * @returns `{ id, email }` sau khi lưu DB (EN: created user id and email for 201 responses).
      * @throws ConflictException — email đã tồn tại (EN: when email collides).
      */
     async signUp(dto: SignUpDto) {
@@ -55,12 +55,13 @@ export class AuthService {
         // Salt rounds cố định cho demo; production có thể tune theo policy (EN: fixed cost factor for bcrypt)
         const hash = await bcrypt.hash(dto.password,
             10)
-        await this.usersRepo.save(this.usersRepo.create({
+        const saved = await this.usersRepo.save(this.usersRepo.create({
             email: dto.email,
             password: hash,
         }))
         return {
-            message: "Created",
+            id: saved.id,
+            email: saved.email,
         }
     }
 
