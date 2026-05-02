@@ -3,6 +3,9 @@ import {
     UnauthorizedException,
 } from "@nestjs/common"
 import {
+    ConfigService,
+} from "@nestjs/config"
+import {
     PassportStrategy,
 } from "@nestjs/passport"
 import {
@@ -20,12 +23,14 @@ import {
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy,
     "google") {
-    constructor(private readonly authService: AuthService) {
+    constructor(
+    private readonly authService: AuthService,
+    private readonly config: ConfigService,
+    ) {
         super({
-            clientID: process.env.GOOGLE_CLIENT_ID ?? "",
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-            callbackURL:
-        process.env.GOOGLE_CALLBACK_URL ?? "http://localhost:3000/auth/google/callback",
+            clientID: config.get<string>("GOOGLE_CLIENT_ID") ?? "",
+            clientSecret: config.get<string>("GOOGLE_CLIENT_SECRET") ?? "",
+            callbackURL: config.getOrThrow<string>("GOOGLE_CALLBACK_URL"),
             scope: [
                 "email",
                 "profile",

@@ -2,6 +2,13 @@ import {
     Module,
 } from "@nestjs/common"
 import {
+    ConfigModule,
+    ConfigService,
+} from "@nestjs/config"
+import {
+    validateEnv,
+} from "./config/env.config"
+import {
     TypeOrmModule,
 } from "@nestjs/typeorm"
 import {
@@ -11,18 +18,27 @@ import {
     User,
 } from "./modules/user/user.entity"
 
-/** Root module — Postgres + Google OAuth auth module. (EN: Root Nest module.) */
+/** Root module — Postgres + validated env + Google OAuth auth module. (EN: Root Nest module.) */
 @Module({
     imports: [
-        TypeOrmModule.forRoot({
-            type: "postgres",
-            host: process.env.DATABASE_HOST ?? "localhost",
-            port: Number(process.env.DATABASE_PORT ?? 5432),
-            username: process.env.DATABASE_USER ?? "starci_user",
-            password: process.env.DATABASE_PASSWORD ?? "starci_password",
-            database: process.env.DATABASE_NAME ?? "starci_db",
-            entities: [User],
-            synchronize: true,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            validate: validateEnv,
+            envFilePath: [".env"],
+        }),
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => ({
+                type: "postgres",
+                host: config.getOrThrow<string>("DATABASE_HOST"),
+                port: config.getOrThrow<number>("DATABASE_PORT"),
+                username: config.getOrThrow<string>("DATABASE_USER"),
+                password: config.getOrThrow<string>("DATABASE_PASSWORD"),
+                database: config.getOrThrow<string>("DATABASE_NAME"),
+                entities: [User],
+                synchronize: true,
+            }),
         }),
         AuthModule,
     ],

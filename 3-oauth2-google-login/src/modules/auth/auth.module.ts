@@ -2,6 +2,10 @@ import {
     Module,
 } from "@nestjs/common"
 import {
+    ConfigModule,
+    ConfigService,
+} from "@nestjs/config"
+import {
     JwtModule,
 } from "@nestjs/jwt"
 import {
@@ -13,6 +17,9 @@ import {
 import {
     User,
 } from "../user/user.entity"
+import {
+    AdminSeedService,
+} from "./admin-seed.service"
 import {
     AuthController,
 } from "./auth.controller"
@@ -30,16 +37,21 @@ import {
         PassportModule.register({
             session: false,
         }),
-        JwtModule.register({
-            secret: process.env.JWT_SECRET ?? "change-me",
-            signOptions: {
-                expiresIn: "7d",
-            },
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => ({
+                secret: config.getOrThrow<string>("JWT_SECRET"),
+                signOptions: {
+                    expiresIn: "7d",
+                },
+            }),
         }),
     ],
     controllers: [AuthController],
     providers: [
         AuthService,
+        AdminSeedService,
         GoogleStrategy,
     ],
 })

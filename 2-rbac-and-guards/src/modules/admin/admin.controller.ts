@@ -32,7 +32,7 @@ export class AdminController {
     @Get("dashboard")
     getDashboard() {
         return {
-            message: "Welcome Admin to the restricted area!",
+            message: "Chào mừng Admin vào khu vực mật!",
             stats: {
                 users: 100,
                 orders: 15,
