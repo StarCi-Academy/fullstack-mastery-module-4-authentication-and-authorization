@@ -45,5 +45,11 @@ export class User {
         type: "varchar",
         nullable: true,
     })
+        lastName: string | null
+
+    @Column({
+        type: "varchar",
+        nullable: true,
+    })
         picture: string | null
 }

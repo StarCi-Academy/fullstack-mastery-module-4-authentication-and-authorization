@@ -33,14 +33,14 @@ export class AuthController {
     }
 
     /**
-     * Callback URL đăng ký trên Google Cloud — sau validate strategy trả JWT JSON cho client/demo tooling.
-     * (EN: OAuth callback issuing JSON token response.)
+     * Callback URL đăng ký trên Google Cloud — JWT nội bộ + payload user theo tài liệu bài học.
+     * (EN: OAuth callback JSON per lesson (message, user, access_token).)
      *
      * @param req — Express req có `user` là entity User sau validate() (EN: request carrying hydrated User).
      */
     @Get("google/callback")
     @UseGuards(AuthGuard("google"))
     async googleCallback(@Req() req: { user: User }) {
-        return this.authService.issueAccessToken(req.user)
+        return this.authService.completeGoogleLogin(req.user)
     }
 }

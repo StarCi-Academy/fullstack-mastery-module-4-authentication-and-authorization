@@ -54,6 +54,7 @@ export class AuthService {
                 email: payload.email,
                 googleId: payload.googleId,
                 firstName: payload.firstName ?? null,
+                lastName: payload.lastName ?? null,
                 picture: payload.picture ?? null,
                 password: null,
             })
@@ -63,22 +64,29 @@ export class AuthService {
 
         user.googleId = payload.googleId
         user.firstName = payload.firstName ?? user.firstName
+        user.lastName = payload.lastName ?? user.lastName
         user.picture = payload.picture ?? user.picture
         await this.usersRepo.save(user)
         return user
     }
 
     /**
-     * Phát JWT access token đơn giản chỉ chứa `sub` sau OAuth — client đổi sang Bearer như demo JWT flow.
-     * (EN: Issues JWT carrying internal user id post OAuth.)
+     * Response callback khớp tài liệu bài học — JWT nội bộ + snapshot user cho demo browser.
+     * (EN: Lesson-shaped OAuth callback JSON with internal access_token.)
      *
      * @param user — Row đã có primary key sau OAuth handshake (EN: persisted user entity).
      */
-    async issueAccessToken(user: User) {
+    async completeGoogleLogin(user: User) {
         const access_token = await this.jwtService.signAsync({
             sub: user.id,
         })
         return {
+            message: "Đăng nhập Google thành công!",
+            user: {
+                email: user.email,
+                firstName: user.firstName ?? "",
+                lastName: user.lastName ?? "",
+            },
             access_token,
         }
     }
