@@ -23,7 +23,8 @@ export type RtJwtPayload = { sub: number };
  * (EN: Passport `jwt-refresh` strategy extracting Bearer refresh JWT.)
  */
 @Injectable()
-export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
+export class RtStrategy extends PassportStrategy(Strategy,
+    "jwt-refresh") {
     constructor(config: ConfigService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

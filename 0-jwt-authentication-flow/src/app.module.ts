@@ -3,27 +3,8 @@
  * (EN: AppModule — registers components for App feature.)
  */
 import {
-    Module,
-} from "@nestjs/common"
-import {
-    ConfigModule,
-    ConfigService,
-} from "@nestjs/config"
-import {
-    TypeOrmModule,
-} from "@nestjs/typeorm"
-import {
-    AuthModule,
-} from "./modules/auth/auth.module"
-import {
-    UserModule,
-} from "./modules/user/user.module"
-import {
-    User,
-} from "./modules/user/user.entity"
-import {
-    validateEnv,
-} from "./config/env.config"
+    databaseConfig, jwtConfig, redisConfig, appConfig 
+} from "./config"
 
 /**
  * Root module: Postgres + Auth + User routes cho demo JWT.
@@ -32,22 +13,22 @@ import {
 @Module({
     imports: [
         ConfigModule.forRoot({
-            isGlobal: true,
-            validate: validateEnv,
-            envFilePath: [".env.local", ".env"],
+            isGlobal: true, load: [appConfig,
+                databaseConfig,
+                jwtConfig] 
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (config: ConfigService) => ({
                 type: "postgres" as const,
-                host: config.getOrThrow<string>("DATABASE_HOST"),
-                port: config.getOrThrow<number>("DATABASE_PORT"),
-                username: config.getOrThrow<string>("DATABASE_USER"),
-                password: config.getOrThrow<string>("DATABASE_PASSWORD"),
-                database: config.getOrThrow<string>("DATABASE_NAME"),
+                host: config.get("database.postgres.host"),
+                port: config.get("database.postgres.port"),
+                username: config.get("database.postgres.username"),
+                password: config.get("database.postgres.password"),
+                database: config.get("database.postgres.database"),
                 entities: [User],
-                // synchronize chá»‰ cho demo local â€” production nÃªn migration (EN: auto-sync OK for lesson DB only)
+                // synchronize chỉ cho demo local â€” production nên migration (EN: auto-sync OK for lesson DB only)
                 synchronize: true,
             }),
         }),

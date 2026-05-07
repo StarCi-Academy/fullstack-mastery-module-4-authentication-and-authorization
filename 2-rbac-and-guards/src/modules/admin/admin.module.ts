@@ -12,7 +12,7 @@ import {
     RolesGuard,
 } from "../../common/guards/roles.guard"
 
-/** Module Ä‘Äƒng kÃ½ RolesGuard nhÆ° provider Ä‘á»ƒ Nest inject Reflector Ä‘Ãºng scope demo. (EN: Admin feature module.) */
+/** Module đăng ký RolesGuard như provider để Nest inject Reflector đúng scope demo. (EN: Admin feature module.) */
 @Module({
     controllers: [AdminController],
     providers: [RolesGuard],

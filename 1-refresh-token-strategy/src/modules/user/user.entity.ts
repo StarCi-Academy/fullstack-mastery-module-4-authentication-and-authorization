@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 
 /**
- * User cÃ³ thÃªm `hashedRefreshToken` Ä‘á»ƒ bind phiÃªn refresh hiá»‡n táº¡i (rotation).
+ * User có thêm `hashedRefreshToken` để bind phiên refresh hiện tại (rotation).
  * (EN: User stores bcrypt hash of active refresh JWT string.)
  */
 @Entity({
@@ -28,7 +28,7 @@ export class User {
         password: string
 
     /**
-     * Hash bcrypt cá»§a refresh JWT Ä‘ang hiá»‡u lá»±c â€” Ä‘á»•i sau má»—i láº§n rotate.
+     * Hash bcrypt của refresh JWT đang hiệu lực â€” đổi sau mỗi lần rotate.
      * (EN: bcrypt hash of current refresh JWT; overwritten on rotation.)
      */
     @Column({

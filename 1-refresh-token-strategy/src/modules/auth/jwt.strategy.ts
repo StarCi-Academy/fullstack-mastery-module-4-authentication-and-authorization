@@ -13,11 +13,11 @@ import {
     Strategy,
 } from "passport-jwt"
 
-/** Claims cá»§a access JWT trong demo refresh-strategy. (EN: Access JWT payload.) */
+/** Claims của access JWT trong demo refresh-strategy. (EN: Access JWT payload.) */
 export type AccessJwtPayload = { sub: number };
 
 /**
- * Strategy chá»‰ Ä‘á»c **access** JWT (Bearer); refresh khÃ´ng Ä‘i qua guard nÃ y.
+ * Strategy chỉ đọc **access** JWT (Bearer); refresh không đi qua guard nÃ y.
  * (EN: Validates short-lived access JWT from Authorization header.)
  */
 @Injectable()
@@ -31,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     /**
-     * @param payload â€” Access JWT Ä‘Ã£ verify (EN: verified access claims).
+     * @param payload â€” Access JWT đã verify (EN: verified access claims).
      * @returns `{ userId }` cho controller/logout (EN: normalized request user).
      */
     validate(payload: AccessJwtPayload) {

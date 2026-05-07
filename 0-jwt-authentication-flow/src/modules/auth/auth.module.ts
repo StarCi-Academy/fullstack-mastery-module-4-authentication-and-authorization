@@ -32,7 +32,7 @@ import {
 } from "./jwt.strategy"
 
 /**
- * Gáº¯n Passport JWT strategy + JwtModule Ä‘á»ƒ AuthService kÃ½ token.
+ * Gắn Passport JWT strategy + JwtModule để AuthService ký token.
  * (EN: Wires Passport JWT strategy and JwtModule for signing.)
  */
 @Module({

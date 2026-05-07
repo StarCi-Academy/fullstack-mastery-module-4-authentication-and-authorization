@@ -10,7 +10,7 @@ import {
 } from "@nestjs/passport"
 
 /**
- * KÃ­ch hoáº¡t Passport strategy tÃªn `jwt` cho route Ä‘Æ°á»£c annotate `@UseGuards`.
+ * Kích hoạt Passport strategy tên `jwt` cho route được annotate `@UseGuards`.
  * (EN: Activates registered Passport JWT strategy before controller handlers.)
  */
 @Injectable()

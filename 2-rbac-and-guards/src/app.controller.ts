@@ -37,7 +37,8 @@ export class AppController {
                     vi: "Phân quyền — RolesGuard đọc @Roles(), so với req.user.role.",
                     en: "Authorization — RolesGuard compares @Roles() metadata to JWT role.",
                 },
-                guard_chain_order: ["JwtAuthGuard", "RolesGuard"],
+                guard_chain_order: ["JwtAuthGuard",
+                    "RolesGuard"],
             },
             api_surface: {
                 signup: "POST /auth/signup",
@@ -62,8 +63,8 @@ export class AppController {
                 },
             ],
             setup_hint: {
-                vi: 'Trước luồng 1: POST /auth/signup với role "admin" (vd. admin@test.com / 123456), sau đó POST /auth/signin.',
-                en: 'Before flow 1: POST /auth/signup with role "admin", then POST /auth/signin.',
+                vi: "Trước luồng 1: POST /auth/signup với role \"admin\" (vd. admin@test.com / 123456), sau đó POST /auth/signin.",
+                en: "Before flow 1: POST /auth/signup with role \"admin\", then POST /auth/signin.",
             },
         }
     }

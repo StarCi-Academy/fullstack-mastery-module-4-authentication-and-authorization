@@ -31,7 +31,7 @@ import {
 } from "./dto/signup.dto"
 
 /**
- * Credential signup/signin â€” JWT chá»©a `sub` + `role` Ä‘á»ƒ phá»¥c vá»¥ RolesGuard.
+ * Credential signup/signin â€” JWT chứa `sub` + `role` để phục vụ RolesGuard.
  * (EN: Issues JWT embedding role claims for downstream authorization.)
  */
 @Injectable()
@@ -43,7 +43,7 @@ export class AuthService {
     ) {}
 
     /**
-     * Cho phÃ©p optional `role` trÃªn signup Ä‘á»ƒ seed admin trong demo â€” production pháº£i khÃ³a/khÃ´ng expose (EN: demo-only admin bootstrap).
+     * Cho phép optional `role` trên signup để seed admin trong demo â€” production phải khóa/không expose (EN: demo-only admin bootstrap).
      *
      * @param dto â€” Email/password vÃ  optional role override (EN: signup payload).
      */
@@ -72,7 +72,7 @@ export class AuthService {
     }
 
     /**
-     * Sau khi AuthN â€” Ä‘Æ°a role vÃ o JWT Ä‘á»ƒ khÃ´ng pháº£i hit DB má»—i request AuthZ Ä‘Æ¡n giáº£n (trade-off stale role).
+     * Sau khi AuthN â€” đưa role vÃ o JWT để không phải hit DB mỗi request AuthZ đơn giản (trade-off stale role).
      * (EN: Signs JWT including role claim for guard checks without DB round-trip.)
      *
      * @param dto â€” credential body (EN: sign-in payload).

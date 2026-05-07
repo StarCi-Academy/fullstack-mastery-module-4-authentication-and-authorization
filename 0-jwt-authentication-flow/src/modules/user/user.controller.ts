@@ -13,16 +13,16 @@ import {
 } from "../auth/jwt-auth.guard"
 
 /**
- * Routes vÃ­ dá»¥ cho resource sau khi Ä‘Ã£ authenticated.
+ * Routes ví dụ cho resource sau khi đã authenticated.
  * (EN: Sample protected user routes requiring JWT.)
  */
 @Controller("users")
 export class UserController {
     /**
-     * `GET /users/profile` â€” chá»‰ vÃ o Ä‘Æ°á»£c khi Bearer JWT há»£p lá»‡.
+     * `GET /users/profile` â€” chỉ vÃ o được khi Bearer JWT hợp lệ.
      * (EN: Protected profile route demonstrating JwtAuthGuard.)
      *
-     * @param req â€” Express request cÃ³ `user` do JwtStrategy gÃ¡n (EN: request with user from JWT).
+     * @param req â€” Express request có `user` do JwtStrategy gán (EN: request with user from JWT).
      */
     @UseGuards(JwtAuthGuard)
     @Get("profile")

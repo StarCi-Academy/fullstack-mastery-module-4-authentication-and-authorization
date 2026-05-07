@@ -3,18 +3,8 @@
  * (EN: AppModule — registers components for App feature.)
  */
 import {
-    Module,
-} from "@nestjs/common"
-import {
-    ConfigModule,
-    ConfigService,
-} from "@nestjs/config"
-import {
-    AppController,
-} from "./app.controller"
-import {
-    validateEnv,
-} from "./config/env.config"
+    databaseConfig, jwtConfig, redisConfig, appConfig 
+} from "./config"
 import {
     TypeOrmModule,
 } from "@nestjs/typeorm"
@@ -33,20 +23,20 @@ import {
     controllers: [AppController],
     imports: [
         ConfigModule.forRoot({
-            isGlobal: true,
-            validate: validateEnv,
-            envFilePath: [".env"],
+            isGlobal: true, load: [appConfig,
+                databaseConfig,
+                jwtConfig] 
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (config: ConfigService) => ({
                 type: "postgres" as const,
-                host: config.getOrThrow<string>("DATABASE_HOST"),
-                port: config.getOrThrow<number>("DATABASE_PORT"),
-                username: config.getOrThrow<string>("DATABASE_USER"),
-                password: config.getOrThrow<string>("DATABASE_PASSWORD"),
-                database: config.getOrThrow<string>("DATABASE_NAME"),
+                host: config.get("database.postgres.host"),
+                port: config.get("database.postgres.port"),
+                username: config.get("database.postgres.username"),
+                password: config.get("database.postgres.password"),
+                database: config.get("database.postgres.database"),
                 entities: [User],
                 synchronize: true,
             }),

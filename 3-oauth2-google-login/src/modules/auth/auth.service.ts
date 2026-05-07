@@ -22,7 +22,7 @@ import type {
 } from "./google-profile"
 
 /**
- * Ãnh xáº¡ Google identity â†’ row DB vÃ  phÃ¡t JWT ná»™i bá»™ sau OAuth callback.
+ * Ánh xạ Google identity â†’ row DB vÃ  phát JWT nội bộ sau OAuth callback.
  * (EN: Links Google profiles to DB rows and signs internal JWTs.)
  */
 @Injectable()
@@ -34,7 +34,7 @@ export class AuthService {
     ) {}
 
     /**
-     * Silent registration / linking: náº¿u email má»›i â†’ INSERT; náº¿u Ä‘Ã£ cÃ³ â†’ enrich googleId/profile fields.
+     * Silent registration / linking: nếu email mới â†’ INSERT; nếu đã có â†’ enrich googleId/profile fields.
      * (EN: Upserts local user linked to Google identity without separate signup form.)
      *
      * @param payload â€” Fields extracted from Google OAuth profile (EN: normalized Google payload).
@@ -75,10 +75,10 @@ export class AuthService {
     }
 
     /**
-     * PhÃ¡t JWT access token Ä‘Æ¡n giáº£n chá»‰ chá»©a `sub` sau OAuth â€” client Ä‘á»•i sang Bearer nhÆ° demo JWT flow.
+     * Phát JWT access token đơn giản chỉ chứa `sub` sau OAuth â€” client đổi sang Bearer như demo JWT flow.
      * (EN: Issues JWT carrying internal user id post OAuth.)
      *
-     * @param user â€” Row Ä‘Ã£ cÃ³ primary key sau OAuth handshake (EN: persisted user entity).
+     * @param user â€” Row đã có primary key sau OAuth handshake (EN: persisted user entity).
      */
     async completeGoogleLogin(user: User) {
         const access_token = await this.jwtService.signAsync({

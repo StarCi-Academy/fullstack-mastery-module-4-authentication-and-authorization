@@ -20,7 +20,8 @@ export type AtJwtPayload = { sub: number };
  * (EN: Passport `jwt` strategy for short-lived access tokens.)
  */
 @Injectable()
-export class AtStrategy extends PassportStrategy(Strategy, "jwt") {
+export class AtStrategy extends PassportStrategy(Strategy,
+    "jwt") {
     constructor(config: ConfigService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

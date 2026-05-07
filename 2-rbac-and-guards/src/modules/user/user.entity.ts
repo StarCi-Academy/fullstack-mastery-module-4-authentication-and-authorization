@@ -11,7 +11,7 @@ import {
     Role,
 } from "../../common/role.enum"
 
-/** User cÃ³ `role` Ä‘á»ƒ RolesGuard Ä‘á»‘i chiáº¿u sau JwtAuthGuard. (EN: User row carrying RBAC role.) */
+/** User có `role` để RolesGuard đối chiếu sau JwtAuthGuard. (EN: User row carrying RBAC role.) */
 @Entity({
     name: "users",
 })
@@ -27,7 +27,7 @@ export class User {
     @Column()
         password: string
 
-    /** Role string lÆ°u DB â€” khá»›p enum Role Ä‘á»ƒ nháº¥t quÃ¡n JWT payload (EN: persisted RBAC role). */
+    /** Role string lưu DB â€” khớp enum Role để nhất quán JWT payload (EN: persisted RBAC role). */
     @Column({
         type: "varchar",
         default: Role.USER,

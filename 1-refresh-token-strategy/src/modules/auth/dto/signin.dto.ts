@@ -7,7 +7,7 @@ import {
     IsString,
 } from "class-validator"
 
-/** Body Ä‘Äƒng nháº­p â€” sau khi OK nháº­n access+refresh pair. (EN: Sign-in DTO.) */
+/** Body đăng nhập â€” sau khi OK nhận access+refresh pair. (EN: Sign-in DTO.) */
 export class SignInDto {
     @IsEmail()
         email: string

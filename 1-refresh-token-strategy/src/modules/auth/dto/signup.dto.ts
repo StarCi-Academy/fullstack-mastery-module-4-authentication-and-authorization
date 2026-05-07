@@ -8,7 +8,7 @@ import {
     MinLength,
 } from "class-validator"
 
-/** Body Ä‘Äƒng kÃ½ credential user. (EN: Sign-up DTO.) */
+/** Body đăng ký credential user. (EN: Sign-up DTO.) */
 export class SignUpDto {
     @IsEmail()
         email: string

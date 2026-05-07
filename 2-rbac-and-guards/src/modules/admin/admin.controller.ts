@@ -21,7 +21,7 @@ import {
 } from "../auth/jwt-auth.guard"
 
 /**
- * Namespace vÃ­ dá»¥ chá»‰ ADMIN Ä‘Æ°á»£c vÃ o sau guard chain Jwt â†’ Roles.
+ * Namespace ví dụ chỉ ADMIN được vÃ o sau guard chain Jwt â†’ Roles.
  * (EN: Sample admin-only controller illustrating guard ordering.)
  */
 @Controller("admin")

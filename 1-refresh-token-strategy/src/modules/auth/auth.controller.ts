@@ -55,7 +55,7 @@ export class AuthController {
         return this.authService.signIn(body)
     }
 
-    /** Body chá»‰ chá»©a refresh_token â€” khÃ´ng dÃ¹ng Bearer refresh trong demo nÃ y. (EN: Refresh uses JSON body.) */
+    /** Body chỉ chứa refresh_token â€” không dùng Bearer refresh trong demo nÃ y. (EN: Refresh uses JSON body.) */
     @Post("refresh")
     @HttpCode(HttpStatus.OK)
     @UseGuards(RtGuard)
@@ -65,7 +65,7 @@ export class AuthController {
     }
 
     /**
-     * Cáº§n access JWT Ä‘á»ƒ biáº¿t userId revoke refresh hash (AuthZ tá»‘i thiá»ƒu).
+     * Cần access JWT để biết userId revoke refresh hash (AuthZ tối thiểu).
      * (EN: Requires bearer access token so server knows whose refresh hash to clear.)
      */
     @Post("logout")

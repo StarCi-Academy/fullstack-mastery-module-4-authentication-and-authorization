@@ -23,5 +23,6 @@ export async function bootstrap(): Promise<void> {
     }))
     const configService = app.get(ConfigService)
     const port = configService.getOrThrow<number>("PORT")
-    await app.listen(port, "0.0.0.0")
+    await app.listen(port,
+        "0.0.0.0")
 }

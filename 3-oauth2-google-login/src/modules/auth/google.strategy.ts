@@ -43,13 +43,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy,
     }
 
     /**
-     * Passport gá»i sau khi Google tráº£ authorization â€” map Profile â†’ persisted User entity shape.
+     * Passport gọi sau khi Google trả authorization â€” map Profile â†’ persisted User entity shape.
      * (EN: Validates profile contains email then upserts local user.)
      *
-     * @param _accessToken â€” KhÃ´ng dÃ¹ng trong demo nhÆ°ng giá»¯ arity Passport (EN: unused OAuth access token).
-     * @param _refreshToken â€” KhÃ´ng lÆ°u offline refresh trong demo ngáº¯n (EN: unused refresh token).
+     * @param _accessToken â€” Không dùng trong demo nhưng giữ arity Passport (EN: unused OAuth access token).
+     * @param _refreshToken â€” Không lưu offline refresh trong demo ngắn (EN: unused refresh token).
      * @param profile â€” passport-google-oauth20 profile payload (EN: Google profile object).
-     * @returns User entity gáº¯n vÃ o `req.user` cho callback controller (EN: hydrated User for controller).
+     * @returns User entity gắn vÃ o `req.user` cho callback controller (EN: hydrated User for controller).
      */
     async validate(
         _accessToken: string,
