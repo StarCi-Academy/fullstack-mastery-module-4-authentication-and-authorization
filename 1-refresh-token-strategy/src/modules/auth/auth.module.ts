@@ -48,7 +48,7 @@ import {
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: (config: ConfigService) => ({
-                secret: config.getOrThrow<string>("JWT_ACCESS_SECRET"),
+                secret: config.get("jwt.accessSecret"),
                 signOptions: {
                     expiresIn: "15m",
                 },

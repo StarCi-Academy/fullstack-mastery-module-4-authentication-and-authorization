@@ -11,7 +11,7 @@ export interface JwtConfig {
 
 export const jwtConfig = registerAs("jwt",
     (): JwtConfig => ({
-        secret: process.env.JWT_SECRET ?? "default-secret",
+        secret: process.env.JWT_ACCESS_SECRET ?? "starci_access_secret",
         expiresIn: process.env.JWT_EXPIRES_IN ?? "15m",
         refreshSecret: process.env.JWT_REFRESH_SECRET ?? "default-refresh-secret",
         refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN ?? "7d",
