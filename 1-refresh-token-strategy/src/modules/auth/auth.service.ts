@@ -173,7 +173,7 @@ export class AuthService {
                 sub: user.id,
             },
             {
-                secret: this.config.get("jwt.refreshSecret"),
+                secret: this.config.get<string>("jwt.refreshSecret"),
                 expiresIn: "7d",
             },
         )
