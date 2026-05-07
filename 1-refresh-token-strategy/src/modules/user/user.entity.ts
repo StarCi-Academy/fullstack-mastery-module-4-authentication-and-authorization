@@ -28,7 +28,7 @@ export class User {
         password: string
 
     /**
-     * Hash bcrypt của refresh JWT đang hiệu lực â€” đổi sau mỗi lần rotate.
+     * Hash bcrypt của refresh JWT đang hiệu lực — đổi sau mỗi lần rotate.
      * (EN: bcrypt hash of current refresh JWT; overwritten on rotation.)
      */
     @Column({

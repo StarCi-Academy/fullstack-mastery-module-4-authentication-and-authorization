@@ -7,7 +7,7 @@ import {
     IsString,
 } from "class-validator"
 
-/** Sign-in credential â€” JWT output chứa role phục vụ RolesGuard. (EN: Sign-in DTO.) */
+/** Sign-in credential — JWT output chứa role phục vụ RolesGuard. (EN: Sign-in DTO.) */
 export class SignInDto {
     @IsEmail()
         email: string

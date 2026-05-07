@@ -20,7 +20,7 @@ import {
     User,
 } from "./modules/user/user.entity"
 
-/** Root module â€” Postgres + Google OAuth auth module. (EN: Root Nest module.) */
+/** Root module — Postgres + Google OAuth auth module. (EN: Root Nest module.) */
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true, load: [appConfig, databaseConfig, jwtConfig] }),

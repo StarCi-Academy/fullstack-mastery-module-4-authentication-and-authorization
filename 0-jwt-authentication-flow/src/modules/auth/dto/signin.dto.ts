@@ -7,7 +7,7 @@ import {
     IsString,
 } from "class-validator"
 
-/** Body đăng nhập â€” password plaintext chỉ tồn tại trong transit để bcrypt.compare. (EN: Sign-in DTO.) */
+/** Body đăng nhập — password plaintext chỉ tồn tại trong transit để bcrypt.compare. (EN: Sign-in DTO.) */
 export class SignInDto {
     @IsEmail()
         email: string

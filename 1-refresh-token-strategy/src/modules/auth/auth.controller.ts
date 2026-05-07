@@ -55,7 +55,7 @@ export class AuthController {
         return this.authService.signIn(body)
     }
 
-    /** Body chỉ chứa refresh_token â€” không dùng Bearer refresh trong demo nÃ y. (EN: Refresh uses JSON body.) */
+    /** Body chỉ chứa refresh_token — không dùng Bearer refresh trong demo nÃ y. (EN: Refresh uses JSON body.) */
     @Post("refresh")
     @HttpCode(HttpStatus.OK)
     @UseGuards(RtGuard)

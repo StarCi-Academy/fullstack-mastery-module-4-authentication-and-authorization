@@ -31,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     /**
-     * @param payload â€” Access JWT đã verify (EN: verified access claims).
+     * @param payload — Access JWT đã verify (EN: verified access claims).
      * @returns `{ userId }` cho controller/logout (EN: normalized request user).
      */
     validate(payload: AccessJwtPayload) {

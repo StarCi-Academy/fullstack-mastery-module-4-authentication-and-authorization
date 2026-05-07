@@ -8,7 +8,7 @@ import {
     MinLength,
 } from "class-validator"
 
-/** Body đăng ký â€” được ValidationPipe whitelist kiểm tra. (EN: Sign-up request DTO.) */
+/** Body đăng ký — được ValidationPipe whitelist kiểm tra. (EN: Sign-up request DTO.) */
 export class SignUpDto {
     @IsEmail()
         email: string

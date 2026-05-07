@@ -34,7 +34,7 @@ import {
     GoogleStrategy,
 } from "./google.strategy"
 
-/** Passport session disabled â€” chỉ redirect OAuth stateless đủ cho demo JWT sau callback. (EN: Stateless OAuth wiring.) */
+/** Passport session disabled — chỉ redirect OAuth stateless đủ cho demo JWT sau callback. (EN: Stateless OAuth wiring.) */
 @Module({
     imports: [
         TypeOrmModule.forFeature([User]),

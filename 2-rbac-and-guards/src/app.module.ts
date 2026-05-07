@@ -26,7 +26,7 @@ import {
     User,
 } from "./modules/user/user.entity"
 
-/** Root â€” Postgres + Auth + Admin resource RBAC. (EN: Root module for RBAC demo.) */
+/** Root — Postgres + Auth + Admin resource RBAC. (EN: Root module for RBAC demo.) */
 @Module({
     controllers: [AppController],
     imports: [

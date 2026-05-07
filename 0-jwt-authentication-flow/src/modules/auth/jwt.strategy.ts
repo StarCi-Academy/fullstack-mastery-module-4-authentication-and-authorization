@@ -16,7 +16,7 @@ import {
     Strategy,
 } from "passport-jwt"
 
-/** Payload JWT sau khi verify â€” chỉ chứa subject user id trong demo nÃ y. (EN: Verified JWT payload shape.) */
+/** Payload JWT sau khi verify — chỉ chứa subject user id trong demo nÃ y. (EN: Verified JWT payload shape.) */
 export type JwtPayload = { sub: number };
 
 /**
@@ -37,8 +37,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
      * Chuẩn hoá `req.user` cho các guard/controller phía sau.
      * (EN: Normalize request user attached after successful JWT verification.)
      *
-     * @param payload â€” Claims đã decode (EN: decoded JWT claims).
-     * @returns `{ userId }` để guard đính vÃ o request (EN: minimal user shape on request).
+     * @param payload — Claims đã decode (EN: decoded JWT claims).
+     * @returns `{ userId }` để guard đính vào request (EN: minimal user shape on request).
      */
     validate(payload: JwtPayload) {
         return {

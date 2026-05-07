@@ -7,7 +7,7 @@ import {
     MinLength,
 } from "class-validator"
 
-/** Client gửi refresh JWT string trong JSON â€” không đặt trong header để đơn giản curl/postman. (EN: Refresh token transport DTO.) */
+/** Client gửi refresh JWT string trong JSON — không đặt trong header để đơn giản curl/postman. (EN: Refresh token transport DTO.) */
 export class RefreshDto {
     @IsString()
     @MinLength(10)

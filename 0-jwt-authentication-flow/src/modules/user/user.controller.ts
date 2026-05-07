@@ -19,10 +19,10 @@ import {
 @Controller("users")
 export class UserController {
     /**
-     * `GET /users/profile` â€” chỉ vÃ o được khi Bearer JWT hợp lệ.
+     * `GET /users/profile` — chỉ vào được khi Bearer JWT hợp lệ.
      * (EN: Protected profile route demonstrating JwtAuthGuard.)
      *
-     * @param req â€” Express request có `user` do JwtStrategy gán (EN: request with user from JWT).
+     * @param req — Express request có `user` do JwtStrategy gán (EN: request with user from JWT).
      */
     @UseGuards(JwtAuthGuard)
     @Get("profile")

@@ -31,7 +31,7 @@ import {
 } from "./dto/signup.dto"
 
 /**
- * Credential signup/signin â€” JWT chứa `sub` + `role` để phục vụ RolesGuard.
+ * Credential signup/signin — JWT chứa `sub` + `role` để phục vụ RolesGuard.
  * (EN: Issues JWT embedding role claims for downstream authorization.)
  */
 @Injectable()
@@ -43,9 +43,9 @@ export class AuthService {
     ) {}
 
     /**
-     * Cho phép optional `role` trên signup để seed admin trong demo â€” production phải khóa/không expose (EN: demo-only admin bootstrap).
+     * Cho phép optional `role` trên signup để seed admin trong demo — production phải khóa/không expose (EN: demo-only admin bootstrap).
      *
-     * @param dto â€” Email/password vÃ  optional role override (EN: signup payload).
+     * @param dto — Email/password và optional role override (EN: signup payload).
      */
     async signUp(dto: SignUpDto) {
         const existing = await this.usersRepo.findOne({
@@ -72,10 +72,10 @@ export class AuthService {
     }
 
     /**
-     * Sau khi AuthN â€” đưa role vÃ o JWT để không phải hit DB mỗi request AuthZ đơn giản (trade-off stale role).
+     * Sau khi AuthN — đưa role vào JWT để không phải hit DB mỗi request AuthZ đơn giản (trade-off stale role).
      * (EN: Signs JWT including role claim for guard checks without DB round-trip.)
      *
-     * @param dto â€” credential body (EN: sign-in payload).
+     * @param dto — credential body (EN: sign-in payload).
      */
     async signIn(dto: SignInDto) {
         const user = await this.usersRepo.findOne({

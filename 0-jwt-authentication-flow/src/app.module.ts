@@ -41,7 +41,7 @@ import { appConfig, databaseConfig, jwtConfig } from "./config"
                 password: config.get<string>("database.postgres.password"),
                 database: config.get<string>("database.postgres.database"),
                 entities: [User],
-                // synchronize chỉ cho demo local â€” production nên migration (EN: auto-sync OK for lesson DB only)
+                // synchronize chỉ cho demo local — production nên migration (EN: auto-sync OK for lesson DB only)
                 synchronize: true,
             }),
         }),

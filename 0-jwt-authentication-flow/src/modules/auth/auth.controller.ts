@@ -20,7 +20,7 @@ import {
 } from "./dto/signup.dto"
 
 /**
- * REST endpoints `/auth/*` cho luồng đăng ký vÃ  đăng nhập JWT.
+ * REST endpoints `/auth/*` cho luồng đăng ký và đăng nhập JWT.
  * (EN: REST `/auth/*` surface for JWT lesson signup/signin.)
  */
 @Controller("auth")
@@ -28,7 +28,7 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     /**
-     * `POST /auth/signup` â€” 201 Created sau khi user được lưu.
+     * `POST /auth/signup` — 201 Created sau khi user được lưu.
      * (EN: Registers user and returns created acknowledgement.)
      *
      * @param body - Payload validated by SignUpDto (EN: validated signup body).
@@ -40,7 +40,7 @@ export class AuthController {
     }
 
     /**
-     * `POST /auth/signin` â€” trả JWT access_token khi credential đúng.
+     * `POST /auth/signin` — trả JWT access_token khi credential đúng.
      * (EN: Issues JWT access token when credentials match.)
      *
      * @param body - Payload validated by SignInDto (EN: validated sign-in body).

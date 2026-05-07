@@ -21,7 +21,7 @@ import {
 } from "./auth.service"
 
 /**
- * passport-google-oauth20 strategy â€” redirect flow handled by Passport middleware before hitting controller body.
+ * passport-google-oauth20 strategy — redirect flow handled by Passport middleware before hitting controller body.
  * (EN: Google OAuth2 strategy delegating persistence to AuthService.)
  */
 @Injectable()
@@ -43,13 +43,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy,
     }
 
     /**
-     * Passport gọi sau khi Google trả authorization â€” map Profile â†’ persisted User entity shape.
+     * Passport gọi sau khi Google trả authorization — map Profile â†’ persisted User entity shape.
      * (EN: Validates profile contains email then upserts local user.)
      *
-     * @param _accessToken â€” Không dùng trong demo nhưng giữ arity Passport (EN: unused OAuth access token).
-     * @param _refreshToken â€” Không lưu offline refresh trong demo ngắn (EN: unused refresh token).
-     * @param profile â€” passport-google-oauth20 profile payload (EN: Google profile object).
-     * @returns User entity gắn vÃ o `req.user` cho callback controller (EN: hydrated User for controller).
+     * @param _accessToken — Không dùng trong demo nhưng giữ arity Passport (EN: unused OAuth access token).
+     * @param _refreshToken — Không lưu offline refresh trong demo ngắn (EN: unused refresh token).
+     * @param profile — passport-google-oauth20 profile payload (EN: Google profile object).
+     * @returns User entity gắn vào `req.user` cho callback controller (EN: hydrated User for controller).
      */
     async validate(
         _accessToken: string,

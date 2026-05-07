@@ -19,7 +19,7 @@ import {
 } from "../decorators/roles.decorator"
 
 /**
- * Lớp AuthZ sau JwtAuthGuard â€” so khớp role trong JWT với `@Roles(...)`.
+ * Lớp AuthZ sau JwtAuthGuard — so khớp role trong JWT với `@Roles(...)`.
  * (EN: Authorization guard comparing JWT role vs endpoint metadata.)
  */
 @Injectable()
@@ -27,9 +27,9 @@ export class RolesGuard implements CanActivate {
     constructor(private readonly reflector: Reflector) {}
 
     /**
-     * @param context â€” Nest execution context để đọc handler/class metadata + HTTP request (EN: Nest execution context).
+     * @param context — Nest execution context để đọc handler/class metadata + HTTP request (EN: Nest execution context).
      * @returns true khi không có `@Roles` hoặc role khớp (EN: allows when metadata absent or role matches).
-     * @throws ForbiddenException â€” token hợp lệ nhưng không đủ quyá»n (EN: 403 when authenticated but unauthorized).
+     * @throws ForbiddenException — token hợp lệ nhưng không đủ quyá»n (EN: 403 when authenticated but unauthorized).
      */
     canActivate(context: ExecutionContext): boolean {
         const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY,

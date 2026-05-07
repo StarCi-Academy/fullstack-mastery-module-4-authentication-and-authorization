@@ -23,7 +23,7 @@ import {
     User,
 } from "./modules/user/user.entity"
 
-/** Root module â€” Postgres + Auth cho access/refresh JWT. (EN: Root wiring DB + auth.) */
+/** Root module — Postgres + Auth cho access/refresh JWT. (EN: Root wiring DB + auth.) */
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true, load: [appConfig, databaseConfig, jwtConfig] }),

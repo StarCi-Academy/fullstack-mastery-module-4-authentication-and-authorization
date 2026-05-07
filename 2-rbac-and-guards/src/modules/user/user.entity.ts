@@ -27,7 +27,7 @@ export class User {
     @Column()
         password: string
 
-    /** Role string lưu DB â€” khớp enum Role để nhất quán JWT payload (EN: persisted RBAC role). */
+    /** Role string lưu DB — khớp enum Role để nhất quán JWT payload (EN: persisted RBAC role). */
     @Column({
         type: "varchar",
         default: Role.USER,

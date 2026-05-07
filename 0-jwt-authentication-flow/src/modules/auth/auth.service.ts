@@ -28,7 +28,7 @@ import {
 } from "./dto/signup.dto"
 
 /**
- * Đăng ký / đăng nhập vÃ  phát JWT access token (demo stateless auth).
+ * Đăng ký / đăng nhập và phát JWT access token (demo stateless auth).
  * (EN: Sign-up / sign-in and issue JWT access tokens for stateless auth.)
  */
 @Injectable()
@@ -45,7 +45,7 @@ export class AuthService {
      *
      * @param dto - Email + plain password từ client (EN: credentials from client body).
      * @returns `{ message }` phản hồi tối giản sau khi lưu DB (EN: minimal ack payload).
-     * @throws ConflictException â€” email đã tồn tại (EN: when email collides).
+     * @throws ConflictException — email đã tồn tại (EN: when email collides).
      */
     async signUp(dto: SignUpDto) {
         const existing = await this.usersRepo.findOne({
@@ -70,12 +70,12 @@ export class AuthService {
     }
 
     /**
-     * Xác thực email/password vÃ  ký JWT chứa `sub` (user id).
+     * Xác thực email/password và ký JWT chứa `sub` (user id).
      * (EN: Validate credentials then sign JWT carrying subject user id.)
      *
      * @param dto - Email + password plaintext (EN: sign-in payload).
      * @returns `{ access_token }` JWT cho header Bearer (EN: bearer token string).
-     * @throws UnauthorizedException â€” sai user hoặc password (EN: invalid credential tuple).
+     * @throws UnauthorizedException — sai user hoặc password (EN: invalid credential tuple).
      */
     async signIn(dto: SignInDto) {
         const user = await this.usersRepo.findOne({
@@ -83,7 +83,7 @@ export class AuthService {
                 email: dto.email,
             },
         })
-        // Không tiết lộ user có tồn tại hay không trong message â€” chỉ generic error (EN: uniform error surface)
+        // Không tiết lộ user có tồn tại hay không trong message — chỉ generic error (EN: uniform error surface)
         if (!user || !(await bcrypt.compare(dto.password,
             user.password))) {
             throw new UnauthorizedException("Invalid credentials")

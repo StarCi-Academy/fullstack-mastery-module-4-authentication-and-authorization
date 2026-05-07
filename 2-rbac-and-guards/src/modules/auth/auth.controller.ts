@@ -19,7 +19,7 @@ import {
     SignUpDto,
 } from "./dto/signup.dto"
 
-/** `/auth/signup|signin` â€” không chứa route nhạy cảm RBAC (EN: authentication endpoints only.) */
+/** `/auth/signup|signin` — không chứa route nhạy cảm RBAC (EN: authentication endpoints only.) */
 @Controller("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
