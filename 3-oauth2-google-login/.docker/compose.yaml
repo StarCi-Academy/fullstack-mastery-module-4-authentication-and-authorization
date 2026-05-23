@@ -1,8 +1,8 @@
-# Stack hạ tầng bài 3-oauth2-google-login — chỉ infra, backend chạy local (nest start).
-# (EN: Infrastructure stack for 3-oauth2-google-login — infra only, backend runs locally.)
+# Stack hạ tầng bài 3-oauth2-google-login — chỉ infra, backend chạy host (nest start --watch).
+# (EN: Infrastructure stack for 3-oauth2-google-login — infra only, backend runs on host.)
 #
-# Thư mục: cd fullstack-mastery-module-4-authentication-authorization-jwt-rbac/3-oauth2-google-login/.docker
-# (EN: Working dir: cd fullstack-mastery-module-4-authentication-authorization-jwt-rbac/3-oauth2-google-login/.docker)
+# Thư mục: cd fullstack-mastery-module-4-authentication-and-authorization/3-oauth2-google-login/.docker
+# (EN: Working dir: cd fullstack-mastery-module-4-authentication-and-authorization/3-oauth2-google-login/.docker)
 #
 # Khởi chạy: docker compose up -d
 # (EN: Start: docker compose up -d)
@@ -15,6 +15,7 @@ services:
   # PostgreSQL — persistence cho bài học (TypeORM — users, OAuth profiles).
   # (EN: PostgreSQL — persistence for the lesson (TypeORM — users, OAuth profiles).)
   postgres:
+    container_name: 3-oauth2-google-login-postgres
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: starci_user
@@ -24,12 +25,15 @@ services:
       # Ánh xạ cổng host 5432 → container 5432 (PostgreSQL).
       # (EN: Map host port 5432 → container 5432 (PostgreSQL).)
       - "5432:5432"
+    networks:
+      - 3-oauth2-google-login-network
     volumes:
       - pg_data:/var/lib/postgresql/data
 
+networks:
+  3-oauth2-google-login-network:
+    name: 3-oauth2-google-login-network
+    driver: bridge
+
 volumes:
   pg_data:
-
-networks:
-  3-oauth2-google-login:
-    name: 3-oauth2-google-login

@@ -42,14 +42,14 @@ export class AuthService {
     private readonly config: ConfigService,
     ) {}
 
-    /** Secret ký/verify access JWT — tách khỏi refresh để giảm blast radius nếu lộ một khóa. (EN: access-token signing secret.) */
-    private accessSecret() {
-        return process.env.JWT_ACCESS_SECRET ?? "access-secret"
+    /** Secret ký/verify access JWT đọc từ ConfigService (namespace `jwt`). (EN: access-token signing secret via ConfigService.) */
+    private accessSecret(): string {
+        return this.config.getOrThrow<string>("jwt.secret")
     }
 
-    /** Secret riêng cho refresh JWT — không dùng chung access để revoke/rotate độc lập hơn. (EN: refresh-token signing secret.) */
-    private refreshSecret() {
-        return process.env.JWT_REFRESH_SECRET ?? "refresh-secret"
+    /** Secret riêng cho refresh JWT — đọc từ ConfigService để tách khỏi access secret. (EN: refresh-token signing secret via ConfigService.) */
+    private refreshSecret(): string {
+        return this.config.getOrThrow<string>("jwt.refreshSecret")
     }
 
     /**
@@ -120,9 +120,8 @@ export class AuthService {
         }
         const rtMatches = await bcrypt.compare(rt, user.refreshTokenHash)
         if (!rtMatches) {
-            throw new UnauthorizedException("Refresh token revoked or rotated")
-        }
-        if (!rtMatches) {
+            // Logic — RT plaintext không khớp hash đã lưu → từ chối.
+            // (EN Logic: Plaintext RT mismatches stored bcrypt hash — reject.)
             throw new ForbiddenException("Access Denied")
         }
         const tokens = await this.issueTokenPair(user)
@@ -171,7 +170,7 @@ export class AuthService {
                 sub: user.id,
             },
             {
-                secret: this.config.getOrThrow<string>("jwt.refreshSecret"),
+                secret: this.refreshSecret(),
                 expiresIn: "7d",
             },
         )
