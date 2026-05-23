@@ -1,5 +1,5 @@
 /**
- * Service xu ly logic nghiep vu cua Auth.
+ * Service xử lý logic nghiệp vụ của Auth.
  * (EN: Business logic service for Auth.)
  */
 import {
@@ -22,6 +22,15 @@ import type {
 } from "./google-profile"
 
 /**
+ * Kết quả tra cứu / tạo user — `isNewUser=true` khi vừa INSERT, `false` khi đã tồn tại.
+ * (EN: Result tuple — isNewUser=true on INSERT, false on lookup.)
+ */
+export interface FindOrCreateResult {
+    user: UserEntity
+    isNewUser: boolean
+}
+
+/**
  * Ánh xạ Google identity → row DB và phát JWT nội bộ sau OAuth callback.
  * (EN: Links Google profiles to DB rows and signs internal JWTs.)
  */
@@ -34,13 +43,14 @@ export class AuthService {
     ) {}
 
     /**
-     * Silent registration / linking: nếu email mới → INSERT; nếu đã có → enrich googleId/profile fields.
-     * (EN: Upserts local user linked to Google identity without separate signup form.)
+     * Silent registration / linking: nếu googleId/email mới → INSERT (isNewUser=true);
+     * ngược lại enrich googleId/profile fields và trả isNewUser=false.
+     * (EN: Upserts local user linked to Google identity and reports whether a new row was created.)
      *
      * @param payload — Fields extracted from Google OAuth profile (EN: normalized Google payload).
-     * @returns Persisted User entity ready for JWT signing (EN: hydrated user row).
+     * @returns Cặp `{ user, isNewUser }` (EN: persisted user + new-row flag).
      */
-    async findOrCreateFromGoogle(payload: GoogleProfilePayload): Promise<UserEntity> {
+    async findOrCreateGoogleUser(payload: GoogleProfilePayload): Promise<FindOrCreateResult> {
         let user =
       (await this.usersRepo.findOne({
           where: {
@@ -63,7 +73,10 @@ export class AuthService {
                 password: null,
             })
             await this.usersRepo.save(user)
-            return user
+            return {
+                user,
+                isNewUser: true,
+            }
         }
 
         user.googleId = payload.googleId
@@ -71,27 +84,49 @@ export class AuthService {
         user.lastName = payload.lastName ?? user.lastName
         user.picture = payload.picture ?? user.picture
         await this.usersRepo.save(user)
+        return {
+            user,
+            isNewUser: false,
+        }
+    }
+
+    /**
+     * Wrapper tương thích cũ — gọi `findOrCreateGoogleUser` và bỏ qua flag isNewUser.
+     * (EN: Backwards-compatible wrapper returning only the user entity.)
+     */
+    async findOrCreateFromGoogle(payload: GoogleProfilePayload): Promise<UserEntity> {
+        const { user } = await this.findOrCreateGoogleUser(payload)
         return user
     }
 
     /**
-     * Phát JWT access token đơn giản chỉ chứa `sub` sau OAuth — client đổi sang Bearer như demo JWT flow.
-     * (EN: Issues JWT carrying internal user id post OAuth.)
+     * Phát JWT access token chứa `sub` và trả kèm `isNewUser` để FE phân nhánh onboarding.
+     * (EN: Issues JWT with sub claim and returns isNewUser for client onboarding split.)
      *
      * @param user — Row đã có primary key sau OAuth handshake (EN: persisted user entity).
+     * @param isNewUser — Cờ user vừa được tạo lần đầu (EN: first-time login flag).
      */
-    async completeGoogleLogin(user: UserEntity) {
+    async completeGoogleLogin(user: UserEntity, isNewUser: boolean): Promise<{
+        message: string
+        access_token: string
+        isNewUser: boolean
+        user: { id: number; email: string; name: string; googleSub: string | null }
+    }> {
         const access_token = await this.jwtService.signAsync({
             sub: user.id,
         })
         return {
             message: "Đăng nhập Google thành công!",
-            user: {
-                email: user.email,
-                firstName: user.firstName ?? "",
-                lastName: user.lastName ?? "",
-            },
             access_token,
+            isNewUser,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: [user.firstName,
+                    user.lastName,
+                ].filter(Boolean).join(" "),
+                googleSub: user.googleId,
+            },
         }
     }
 }

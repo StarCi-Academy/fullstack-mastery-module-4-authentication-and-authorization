@@ -61,7 +61,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy,
             throw new UnauthorizedException("Google account has no email")
         }
 
-        const user = await this.authService.findOrCreateFromGoogle({
+        const { user, isNewUser } = await this.authService.findOrCreateGoogleUser({
             googleId: profile.id,
             email,
             firstName: profile.name?.givenName,
@@ -69,6 +69,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy,
             picture: profile.photos?.[0]?.value,
         })
 
-        return user
+        return {
+            user,
+            isNewUser,
+        }
     }
 }
