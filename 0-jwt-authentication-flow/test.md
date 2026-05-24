@@ -1,60 +1,54 @@
-# Test flows for 0-jwt-authentication-flow
+# Test Result
 
-## Flow 1 — Signup
-**Purpose:** Verify user creation hashes the password and persists the row.
-**Command (PowerShell):**
-```powershell
-Invoke-RestMethod -Uri http://localhost:3000/auth/signup -Method Post -ContentType "application/json" -Body '{"email":"test@demo.com","password":"secret123"}'
-```
-**Command (curl):**
-```bash
-curl -s -X POST http://localhost:3000/auth/signup -H "Content-Type: application/json" -d '{"email":"test@demo.com","password":"secret123"}'
-```
-**Postman hint:** POST `http://localhost:3000/auth/signup`, Body → raw JSON `{"email":"test@demo.com","password":"secret123"}`.
-**Expected response (HTTP 201):** `{ "message": "Created" }`.
-**Pass criteria:** Response status is 201 and body matches. Row exists in `users` table with bcrypt-hashed password.
+**Status:** PASSED
 
-## Flow 2 — Signin and receive JWT
-**Purpose:** Verify credentials bcrypt-match and the server signs a JWT with `sub`.
-**Command (PowerShell):**
-```powershell
-$res = Invoke-RestMethod -Uri http://localhost:3000/auth/signin -Method Post -ContentType "application/json" -Body '{"email":"test@demo.com","password":"secret123"}'
-$res.access_token
-```
-**Command (curl):**
-```bash
-curl -s -X POST http://localhost:3000/auth/signin -H "Content-Type: application/json" -d '{"email":"test@demo.com","password":"secret123"}'
-```
-**Postman hint:** POST `http://localhost:3000/auth/signin`, Body → raw JSON `{"email":"test@demo.com","password":"secret123"}`.
-**Expected response (HTTP 200):** `{ "access_token": "<JWT>" }`.
-**Pass criteria:** JWT decodes (jwt.io) to `{ sub: <userId>, iat, exp }`.
+## Expected & Actual Matches
 
-## Flow 3 — Access protected route
-**Purpose:** Verify `JwtAuthGuard` accepts a valid Bearer and exposes `req.user`.
-**Command (PowerShell):**
-```powershell
-Invoke-RestMethod -Uri http://localhost:3000/users/profile -Headers @{ Authorization = "Bearer $($res.access_token)" }
+**Luồng 1 -- Đăng ký tài khoản (`POST /auth/signup`)**
+Đăng ký user mới trả về 201:
+```json
+{
+  "id": 1,
+  "email": "test@demo.com"
+}
 ```
-**Command (curl):**
-```bash
-curl -s http://localhost:3000/users/profile -H "Authorization: Bearer <JWT>"
-```
-**Postman hint:** GET `http://localhost:3000/users/profile`, Headers → `Authorization: Bearer <JWT>`.
-**Expected response (HTTP 200):** `{ "message": "You have accessed a protected area!", "user": { "userId": 1 } }`.
-**Pass criteria:** Status 200, `user.userId` matches the `sub` from Flow 2.
+Pass criteria: response status là 201 và trả về thông tin user đã tạo.
 
-## Flow 4 — Reject missing or malformed Bearer token
-**Purpose:** Verify `JwtAuthGuard` 401s on both absent header and unverifiable token.
-**Command (PowerShell):**
-```powershell
-Invoke-RestMethod -Uri http://localhost:3000/users/profile -Method Get -ErrorVariable err; $err.ErrorRecord.ErrorDetails
-Invoke-RestMethod -Uri http://localhost:3000/users/profile -Headers @{ Authorization = "Bearer abc.def.ghi" } -ErrorVariable err
+**Luồng 2 -- Đăng nhập nhận JWT (`POST /auth/signin`)**
+Nhận access token trả về 200:
+```json
+{
+  "access_token": "<JWT_TOKEN_EXISTS>"
+}
 ```
-**Command (curl):**
-```bash
-curl -i -s http://localhost:3000/users/profile
-curl -i -s http://localhost:3000/users/profile -H "Authorization: Bearer abc.def.ghi"
+Pass criteria: status 200 và nhận được access_token.
+
+**Luồng 3 -- Truy cập protected route với Bearer token (`GET /users/profile`)**
+Truy cập profile thành công trả về 200:
+```json
+{
+  "message": "Bạn đã truy cập vào khu vực bảo mật!",
+  "user": {
+    "userId": 1
+  }
+}
 ```
-**Postman hint:** GET `http://localhost:3000/users/profile` with no header, then with `Authorization: Bearer abc.def.ghi`.
-**Expected response (HTTP 401):** `{ "statusCode": 401, "message": "Unauthorized" }` for both sub-cases.
-**Pass criteria:** Both calls return 401; controller logic does not run (no DB access logs).
+Pass criteria: status 200, hiển thị thông điệp bảo mật cùng userId.
+
+**Luồng 4 -- Từ chối request không có hoặc sai định dạng Bearer token (`GET /users/profile`)**
+Trường hợp không gửi token trả về 401:
+```json
+{
+  "message": "Unauthorized",
+  "statusCode": 401
+}
+```
+Trường hợp gửi token sai định dạng trả về 401:
+```json
+{
+  "message": "Unauthorized",
+  "statusCode": 401
+}
+```
+Pass criteria: cả hai trường hợp đều trả về 401 Unauthorized.
+

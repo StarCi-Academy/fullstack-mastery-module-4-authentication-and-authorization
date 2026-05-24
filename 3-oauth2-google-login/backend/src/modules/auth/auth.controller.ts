@@ -21,7 +21,7 @@ import {
 } from "./auth.service"
 import {
     UserEntity,
-} from "../user"
+} from "../../entities"
 
 /**
  * Hai endpoint OAuth dance — không chứa body JSON; Passport điều hướng trình duyệt.
@@ -66,7 +66,7 @@ export class AuthController {
                 email: "mock@demo.com",
                 firstName: "Mock",
                 lastName: "User",
-                picture: null,
+                picture: undefined,
             })
             return this.authService.completeGoogleLogin(user,
                 isNewUser)

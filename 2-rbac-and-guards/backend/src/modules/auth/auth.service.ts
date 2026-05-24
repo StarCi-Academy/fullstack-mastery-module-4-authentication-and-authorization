@@ -22,7 +22,7 @@ import {
 } from "../../common"
 import {
     UserEntity,
-} from "../user"
+} from "../../entities"
 import {
     SignInDto,
     SignUpDto,

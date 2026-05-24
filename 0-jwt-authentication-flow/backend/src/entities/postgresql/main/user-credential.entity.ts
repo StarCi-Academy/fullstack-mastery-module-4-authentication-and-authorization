@@ -22,10 +22,10 @@ import {
 })
 export class UserCredentialEntity {
     @PrimaryGeneratedColumn()
-        id: number
+        id!: number
 
     @Column()
-        userId: number
+        userId!: number
 
     @OneToOne(() => UserEntity,
         (user) => user.credential,
@@ -33,8 +33,8 @@ export class UserCredentialEntity {
     @JoinColumn({
         name: "userId",
     })
-        user: UserEntity
+        user!: UserEntity
 
     @Column()
-        password: string
+        password!: string
 }

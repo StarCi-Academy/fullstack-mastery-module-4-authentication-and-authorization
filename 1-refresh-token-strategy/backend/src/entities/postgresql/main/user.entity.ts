@@ -17,15 +17,15 @@ import {
 })
 export class UserEntity {
     @PrimaryGeneratedColumn()
-        id: number
+        id!: number
 
     @Column({
         unique: true,
     })
-        email: string
+        email!: string
 
     @Column()
-        password: string
+        password!: string
 
     /**
      * Hash bcrypt của refresh JWT đang hiệu lực — đổi sau mỗi lần rotate.
@@ -35,5 +35,5 @@ export class UserEntity {
         type: "varchar",
         nullable: true,
     })
-        refreshTokenHash: string | null
+        refreshTokenHash!: string | null
 }

@@ -21,12 +21,12 @@ import {
 })
 export class UserEntity {
     @PrimaryGeneratedColumn()
-        id: number
+        id!: number
 
     @Column({
         unique: true,
     })
-        email: string
+        email!: string
 
     @OneToOne(() => UserCredentialEntity,
         (credential) => credential.user,

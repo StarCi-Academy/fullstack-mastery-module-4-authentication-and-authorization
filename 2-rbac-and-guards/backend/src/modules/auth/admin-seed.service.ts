@@ -18,7 +18,7 @@ import {
 } from "../../common"
 import {
     UserEntity,
-} from "../user"
+} from "../../entities"
 
 /** Đảm bảo có một admin demo sau khi DB sẵn sàng — idempotent theo email. (EN: Boot-time admin seed for lesson DB.) */
 @Injectable()

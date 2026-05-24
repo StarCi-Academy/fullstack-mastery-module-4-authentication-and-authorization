@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 import {
     Role,
-} from "../../common"
+} from "../../../common"
 
 /** User có `role` để RolesGuard đối chiếu sau JwtAuthGuard. (EN: User row carrying RBAC role.) */
 @Entity({
@@ -17,20 +17,20 @@ import {
 })
 export class UserEntity {
     @PrimaryGeneratedColumn()
-        id: number
+        id!: number
 
     @Column({
         unique: true,
     })
-        email: string
+        email!: string
 
     @Column()
-        password: string
+        password!: string
 
     /** Role string lưu DB — khớp enum Role để nhất quán JWT payload (EN: persisted RBAC role). */
     @Column({
         type: "varchar",
         default: Role.USER,
     })
-        role: Role
+        role!: Role
 }

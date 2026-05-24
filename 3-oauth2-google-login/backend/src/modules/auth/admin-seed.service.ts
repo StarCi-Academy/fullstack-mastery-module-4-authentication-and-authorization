@@ -15,7 +15,7 @@ import {
 } from "typeorm"
 import {
     UserEntity,
-} from "../user"
+} from "../../entities"
 
 /** User credential demo (password) song song OAuth — idempotent theo email. (EN: Boot-time password user seed.) */
 @Injectable()

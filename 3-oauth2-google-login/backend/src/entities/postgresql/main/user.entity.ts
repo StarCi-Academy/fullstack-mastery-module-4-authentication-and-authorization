@@ -17,19 +17,19 @@ import {
 })
 export class UserEntity {
     @PrimaryGeneratedColumn()
-        id: number
+        id!: number
 
     @Column({
         unique: true,
     })
-        email: string
+        email!: string
 
     /** Null khi đăng nhập chỉ qua Google — không có credential password local. (EN: nullable password for OAuth-only.) */
     @Column({
         type: "varchar",
         nullable: true,
     })
-        password: string | null
+        password!: string | null
 
     /** Provider stable id để khớp account Google tái đăng nhập. (EN: Google subject identifier.) */
     @Column({
@@ -37,23 +37,23 @@ export class UserEntity {
         nullable: true,
         unique: true,
     })
-        googleId: string | null
+        googleId!: string | null
 
     @Column({
         type: "varchar",
         nullable: true,
     })
-        firstName: string | null
+        firstName!: string | null
 
     @Column({
         type: "varchar",
         nullable: true,
     })
-        lastName: string | null
+        lastName!: string | null
 
     @Column({
         type: "varchar",
         nullable: true,
     })
-        picture: string | null
+        picture!: string | null
 }

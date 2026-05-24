@@ -20,7 +20,7 @@ import {
 } from "@nestjs/typeorm"
 import {
     UserEntity,
-} from "../user"
+} from "../../entities"
 import {
     AdminSeedService,
 } from "./admin-seed.service"

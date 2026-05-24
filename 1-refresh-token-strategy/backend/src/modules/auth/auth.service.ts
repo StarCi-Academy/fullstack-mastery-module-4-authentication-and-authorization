@@ -23,7 +23,7 @@ import {
 } from "typeorm"
 import {
     UserEntity,
-} from "../user"
+} from "../../entities"
 import {
     SignInDto,
     SignUpDto,

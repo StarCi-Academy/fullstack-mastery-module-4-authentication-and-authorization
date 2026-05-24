@@ -6,7 +6,7 @@ import {
 } from "@nestjs/typeorm"
 import {
     UserEntity,
-} from "./user.entity"
+} from "../../entities"
 import {
     UserController,
 } from "./user.controller"
