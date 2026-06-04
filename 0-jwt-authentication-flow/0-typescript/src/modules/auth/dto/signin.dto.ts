@@ -1,0 +1,16 @@
+﻿/**
+ * DTO validates sign-in payload.
+ */
+import {
+    IsEmail,
+    IsString,
+} from "class-validator"
+
+/** Sign-in DTO. */
+export class SignInDto {
+    @IsEmail()
+        email: string
+
+    @IsString()
+        password: string
+}

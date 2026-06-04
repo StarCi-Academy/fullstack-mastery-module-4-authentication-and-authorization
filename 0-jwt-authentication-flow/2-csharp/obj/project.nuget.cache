@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "dgSpecHash": "WQ/nL/GUmRA=",
+  "success": true,
+  "projectFilePath": "C:\\Repositories\\ac\\starci-academy-backend\\.repo\\fullstack-mastery-module-4-authentication-and-authorization\\0-jwt-authentication-flow\\2-csharp\\2-csharp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Cuong\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.27\\microsoft.aspnetcore.authentication.jwtbearer.8.0.27.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.entityframeworkcore\\8.0.11\\microsoft.entityframeworkcore.8.0.11.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\8.0.11\\microsoft.entityframeworkcore.abstractions.8.0.11.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\8.0.11\\microsoft.entityframeworkcore.analyzers.8.0.11.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\8.0.11\\microsoft.entityframeworkcore.relational.8.0.11.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.caching.memory\\8.0.1\\microsoft.extensions.caching.memory.8.0.1.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.1\\microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.logging\\8.0.1\\microsoft.extensions.logging.8.0.1.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.options\\8.0.2\\microsoft.extensions.options.8.0.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.identitymodel.abstractions\\7.1.2\\microsoft.identitymodel.abstractions.7.1.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\7.1.2\\microsoft.identitymodel.jsonwebtokens.7.1.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.identitymodel.logging\\7.1.2\\microsoft.identitymodel.logging.7.1.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.identitymodel.protocols\\7.1.2\\microsoft.identitymodel.protocols.7.1.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.1.2\\microsoft.identitymodel.protocols.openidconnect.7.1.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\microsoft.identitymodel.tokens\\7.1.2\\microsoft.identitymodel.tokens.7.1.2.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\npgsql\\8.0.6\\npgsql.8.0.6.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\8.0.11\\npgsql.entityframeworkcore.postgresql.8.0.11.nupkg.sha512",
+    "C:\\Users\\Cuong\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.1.2\\system.identitymodel.tokens.jwt.7.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}
