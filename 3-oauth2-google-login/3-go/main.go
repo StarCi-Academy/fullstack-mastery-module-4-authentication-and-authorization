@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -27,7 +28,27 @@ type User struct {
 var jwtSecret = []byte("9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d")
 
 func main() {
-	dsn := "host=localhost user=starci_user password=starci_password dbname=starci_db port=5432 sslmode=disable"
+	pgHost := os.Getenv("POSTGRES_HOST")
+	if pgHost == "" {
+		pgHost = "localhost"
+	}
+	pgPort := os.Getenv("POSTGRES_PORT")
+	if pgPort == "" {
+		pgPort = "5432"
+	}
+	pgUser := os.Getenv("POSTGRES_USER")
+	if pgUser == "" {
+		pgUser = "starci_user"
+	}
+	pgPass := os.Getenv("POSTGRES_PASSWORD")
+	if pgPass == "" {
+		pgPass = "starci_password"
+	}
+	pgDb := os.Getenv("POSTGRES_DB")
+	if pgDb == "" {
+		pgDb = "starci_db"
+	}
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", pgHost, pgUser, pgPass, pgDb, pgPort)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
@@ -125,8 +146,12 @@ func main() {
 		c.JSON(http.StatusUnauthorized, gin.H{"statusCode": 401, "message": "Google authentication failed"})
 	})
 
-	fmt.Println("Server starting on port 3000")
-	if err := r.Run(":3000"); err != nil {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	fmt.Printf("Server starting on port %s\n", port)
+	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("failed to run server: %v", err)
 	}
 }
