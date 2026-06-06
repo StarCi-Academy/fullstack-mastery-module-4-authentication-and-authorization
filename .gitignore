@@ -31,3 +31,9 @@ oauth-server
 __pycache__/
 *.pyc
 *.pyo
+build/
+.next/
+out/
+.gradle/
+go-out.txt
+go-err.txt
