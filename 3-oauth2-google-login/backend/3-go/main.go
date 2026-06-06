@@ -46,9 +46,15 @@ type User struct {
 }
 
 // jwtSecret is the HMAC-SHA256 signing key used for all internal JWTs.
-// In production this should be loaded from an environment variable or secrets manager —
-// never hard-coded in source. The hard-coded value here is safe only for a demo.
-var jwtSecret = []byte("9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d")
+// Loaded from JWT_SECRET env var; falls back to a demo key for local development.
+// In production always override via an environment variable or secrets manager.
+var jwtSecret = func() []byte {
+	s := os.Getenv("JWT_SECRET")
+	if s == "" {
+		s = "9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d"
+	}
+	return []byte(s)
+}()
 
 func main() {
 	// --- Database configuration ---

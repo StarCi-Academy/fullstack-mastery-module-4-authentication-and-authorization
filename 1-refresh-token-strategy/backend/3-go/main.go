@@ -68,11 +68,24 @@ type SignInRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-// jwtSecret is the HMAC key used to sign and verify access tokens (AT_SECRET).
-// Separate from jwtRefreshSecret so an AT cannot be used as an RT and vice-versa.
+// jwtSecret signs access tokens (AT_SECRET); jwtRefreshSecret signs refresh tokens (RT_SECRET).
+// Keeping them separate prevents an AT from being accepted as a valid RT and vice-versa.
+// Both are loaded from env vars with safe demo defaults for local development.
 var (
-	jwtSecret        = []byte("9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d")
-	jwtRefreshSecret = []byte("8b7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5e")
+	jwtSecret = func() []byte {
+		s := os.Getenv("JWT_SECRET")
+		if s == "" {
+			s = "9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d"
+		}
+		return []byte(s)
+	}()
+	jwtRefreshSecret = func() []byte {
+		s := os.Getenv("JWT_REFRESH_SECRET")
+		if s == "" {
+			s = "8b7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5e"
+		}
+		return []byte(s)
+	}()
 )
 
 // main is the application entry point.

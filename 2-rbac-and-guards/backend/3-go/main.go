@@ -49,8 +49,15 @@ type SignInRequest struct {
 }
 
 // jwtSecret is the symmetric HMAC-SHA256 key used to sign and verify JWTs.
-// In production, load this from a secret manager (Vault, AWS Secrets Manager, etc.).
-var jwtSecret = []byte("9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d")
+// Loaded from JWT_SECRET env var; falls back to a demo key for local development.
+// In production, always override via a secret manager (Vault, AWS Secrets Manager, etc.).
+var jwtSecret = func() []byte {
+	s := os.Getenv("JWT_SECRET")
+	if s == "" {
+		s = "9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d"
+	}
+	return []byte(s)
+}()
 
 // main bootstraps the application: opens a PostgreSQL connection, runs GORM AutoMigrate,
 // seeds the admin user, registers routes, and starts the HTTP server.

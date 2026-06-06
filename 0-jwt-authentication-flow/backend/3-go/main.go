@@ -52,8 +52,15 @@ type SignInRequest struct {
 }
 
 // jwtSecret is the HMAC key used to sign and verify all tokens.
-// In production this must come from a secret manager — never commit real secrets.
-var jwtSecret = []byte("9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d")
+// Loaded from JWT_SECRET env var; falls back to a demo key for local development.
+// In production, always override this via a secret manager — never commit a real key.
+var jwtSecret = func() []byte {
+	s := os.Getenv("JWT_SECRET")
+	if s == "" {
+		s = "9a7631a7b8e662b9514731c34a2e5d7f6b9a8c7d6e5f4a3b2c1d0e9f8a7b6c5d"
+	}
+	return []byte(s)
+}()
 
 func main() {
 	// Read database connection details from environment variables;
