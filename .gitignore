@@ -1,0 +1,29 @@
+
+# Local secrets (NEVER commit)
+.env.local
+.env*.local
+.oauth.env
+
+# Node.js build artifacts
+node_modules/
+dist/
+
+# Java / Maven build artifacts
+target/
+*.class
+*.jar
+*.war
+
+# C# / .NET build artifacts
+bin/
+obj/
+
+# Go build artifacts
+*.exe
+*.test
+vendor/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
