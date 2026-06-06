@@ -39,6 +39,6 @@ export async function bootstrap(): Promise<void> {
     const config = app.get(ConfigService)
     const port = config.get<number>("app.port") ?? 3000
 
-    // Bind to all interfaces so the server is reachable from outside the container/VM.
-    await app.listen(port, "0.0.0.0")
+    // Bind to loopback only — prevents Windows Firewall prompts and limits surface area.
+    await app.listen(port, "127.0.0.1")
 }

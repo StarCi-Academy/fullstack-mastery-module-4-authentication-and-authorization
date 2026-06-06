@@ -24,5 +24,5 @@ export async function bootstrap(): Promise<void> {
     // Resolve port via ConfigService, not process.env.
     const config = app.get(ConfigService)
     const port = config.get<number>("app.port") ?? 3000
-    await app.listen(port, "0.0.0.0")
+    await app.listen(port, "127.0.0.1")
 }

@@ -35,7 +35,6 @@ export async function bootstrap(): Promise<void> {
     const config = app.get(ConfigService)
     const port = config.get<number>("app.port") ?? 3000
 
-    // Bind to all interfaces so the server is reachable from the host machine
-    // (lesson demo runs on the host, not inside Docker)
-    await app.listen(port, "0.0.0.0")
+    // Bind to loopback only to avoid OS firewall prompts during local development.
+    await app.listen(port, "127.0.0.1")
 }

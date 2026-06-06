@@ -11,6 +11,8 @@
 package main
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"log"
@@ -26,6 +28,14 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+// hashForBcrypt returns a SHA-256 hex digest of s.
+// JWT refresh tokens exceed bcrypt's 72-byte limit, so we pre-hash to 64 hex chars
+// before calling bcrypt.GenerateFromPassword.
+func hashForBcrypt(s string) string {
+	sum := sha256.Sum256([]byte(s))
+	return hex.EncodeToString(sum[:])
+}
 
 // User is the GORM model for the "users" table.
 // RefreshTokenHash stores only the bcrypt hash of the active refresh token (never plaintext).
@@ -181,7 +191,8 @@ func main() {
 		}
 
 		// Persist only the bcrypt hash of the RT — a DB breach cannot replay the raw RT.
-		rtHash, err := bcrypt.GenerateFromPassword([]byte(refreshTok), 10)
+		// Pre-hash with SHA-256 to keep the input under bcrypt's 72-byte limit.
+		rtHash, err := bcrypt.GenerateFromPassword([]byte(hashForBcrypt(refreshTok)), 10)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash refresh token"})
 			return
@@ -249,7 +260,8 @@ func main() {
 		}
 
 		// Empty hash = logged out; hash mismatch = rotated or replayed token.
-		if user.RefreshTokenHash == "" || bcrypt.CompareHashAndPassword([]byte(user.RefreshTokenHash), []byte(tokenStr)) != nil {
+		// Compare against the SHA-256 digest (same pre-hash used during storage).
+		if user.RefreshTokenHash == "" || bcrypt.CompareHashAndPassword([]byte(user.RefreshTokenHash), []byte(hashForBcrypt(tokenStr))) != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"statusCode": 401, "message": "Refresh token revoked or rotated", "error": "Unauthorized"})
 			return
 		}
@@ -261,7 +273,8 @@ func main() {
 			return
 		}
 
-		rtHash, err := bcrypt.GenerateFromPassword([]byte(refreshTok), 10)
+		// Pre-hash with SHA-256 to keep the input under bcrypt's 72-byte limit.
+		rtHash, err := bcrypt.GenerateFromPassword([]byte(hashForBcrypt(refreshTok)), 10)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash refresh token"})
 			return

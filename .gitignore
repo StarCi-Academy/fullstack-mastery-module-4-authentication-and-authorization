@@ -17,11 +17,15 @@ target/
 # C# / .NET build artifacts
 bin/
 obj/
+publish/
 
 # Go build artifacts
 *.exe
 *.test
 vendor/
+*-server
+rbac-server
+oauth-server
 
 # Python bytecode
 __pycache__/

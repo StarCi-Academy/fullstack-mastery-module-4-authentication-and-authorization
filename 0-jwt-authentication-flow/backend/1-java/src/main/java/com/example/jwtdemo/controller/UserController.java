@@ -20,7 +20,7 @@ public class UserController {
         userMap.put("userId", userId);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Bạn đã truy cập vào khu vực bảo mật!");
+        response.put("message", "You have accessed a protected resource!");
         response.put("user", userMap);
 
         return response;

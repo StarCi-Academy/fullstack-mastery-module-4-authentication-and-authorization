@@ -207,8 +207,8 @@ func main() {
 		port = "3000"
 	}
 	fmt.Printf("Server starting on port %s\n", port)
-	// Bind to all interfaces (":port") — for loopback-only, use "127.0.0.1:"+port.
-	if err := r.Run(":" + port); err != nil {
+	// Bind to loopback only — prevents Windows Firewall prompts and limits surface area.
+	if err := r.Run("127.0.0.1:" + port); err != nil {
 		log.Fatalf("failed to run server: %v", err)
 	}
 }
