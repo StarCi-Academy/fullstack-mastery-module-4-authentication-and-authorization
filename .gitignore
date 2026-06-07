@@ -37,3 +37,10 @@ out/
 .gradle/
 go-out.txt
 go-err.txt
+
+# Misc
+*.tsbuildinfo
+*.log
+.DS_Store
+test-results/
+playwright-report/
